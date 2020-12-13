@@ -9,7 +9,21 @@ class FlappyBird(PhysicsGameObject):
         self._load_surface()        
         self.rect = self.surface.get_rect()
         self._update_initial_pos()
+        self.rot = 0
+        self._set_rect_center()
         self.JUMP_VEL = (0,-5)
+        self.MAX_ROTATION = 60
+        self.MIN_ROTATION = -60
+        self.rotated_surface = None
+
+    def _set_rect_center(self):
+        left = self.rect.left
+        top = self.rect.top
+        height = self.rect.height
+        width = self.rect.width
+
+
+        self.rect.center = (left - (width//2), top - (height//2))
 
     def _load_surface(self):
         FLAPPY_BIRD_URL = "images/flappy_bird.png"
@@ -27,19 +41,21 @@ class FlappyBird(PhysicsGameObject):
         self.rect.top = (height // 2) - (self.rect.height // 2)
         self.rect.left = width * 0.2
 
+    def _rotate(self):
+        self.rotated_surface = pygame.transform.rotate(self.surface,self.rot)
+        self.rot -= 1
+        if self.rot == -360:
+            self.rot = 0
+        self.rect = self.rotated_surface.get_rect(center=self.rect.center)
 
     def update(self):
         super().update()
-        # for event in pygame.event.get():
-        #     if event.type == pygame.KEYDOWN:
-        #         if event.key == pygame.K_SPACE:
-        #             print("space pressed")
         if keyboard.is_pressed("space"):
-        #     print("hello")
-                    # self.vel = np.add(self.jump_vel,self.vel)
-            print("hello")
             self.vel = self.JUMP_VEL
-                    # self.vel += self.jump_vel
+        self._rotate()
 
     def blit(self,screen):
-        screen.blit(self.surface,self.rect)
+        if self.rotated_surface:
+            screen.blit(self.rotated_surface,self.rect)
+        else:
+            screen.blit(self.surface,self.rect)
