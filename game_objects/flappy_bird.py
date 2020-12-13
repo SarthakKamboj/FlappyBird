@@ -1,5 +1,7 @@
 import pygame
+import keyboard
 from game_objects.physics_gameobject import PhysicsGameObject
+import numpy as np
 
 class FlappyBird(PhysicsGameObject):
     def __init__(self):
@@ -7,6 +9,7 @@ class FlappyBird(PhysicsGameObject):
         self._load_surface()        
         self.rect = self.surface.get_rect()
         self._update_initial_pos()
+        self.JUMP_VEL = (0,-5)
 
     def _load_surface(self):
         FLAPPY_BIRD_URL = "images/flappy_bird.png"
@@ -27,10 +30,16 @@ class FlappyBird(PhysicsGameObject):
 
     def update(self):
         super().update()
-        for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    print("space pressed")
+        # for event in pygame.event.get():
+        #     if event.type == pygame.KEYDOWN:
+        #         if event.key == pygame.K_SPACE:
+        #             print("space pressed")
+        if keyboard.is_pressed("space"):
+        #     print("hello")
+                    # self.vel = np.add(self.jump_vel,self.vel)
+            print("hello")
+            self.vel = self.JUMP_VEL
+                    # self.vel += self.jump_vel
 
     def blit(self,screen):
         screen.blit(self.surface,self.rect)
