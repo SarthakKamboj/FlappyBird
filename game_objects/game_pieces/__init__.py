@@ -1,4 +1,5 @@
 import pygame
+import sys
 import keyboard
 import numpy as np
 from ..physics_objects import ColliderPhysicsObject, PhysicsGameObject
@@ -8,12 +9,17 @@ import pygame
 
 class Pipe():
     def __init__(self):
-        pass
+        self.pipe_head = PipeHead()
+        self.pipe_body = PipeBody()
+
+    def blit(self,screen):
+        self.pipe_head.blit(screen)
+        self.pipe_body.blit(screen)
 
 class FlappyBird(PhysicsGameObject,GameObject):
     def __init__(self):
         FLAPPY_BIRD_URL = "images/flappy_bird.png"
-        SCALE = 0.1
+        SCALE = 0.09
         PhysicsGameObject.__init__(self)
         GameObject.__init__(self,URL=FLAPPY_BIRD_URL,SCALE=SCALE)
         self._update_initial_pos()
@@ -71,7 +77,7 @@ class FlappyBird(PhysicsGameObject,GameObject):
 class BackgroundSurface(GameObject):
     def __init__(self,INIT_X):
         BCK_URL = "images/bck.PNG"
-        super().__init__(BCK_URL)
+        super().__init__(URL=BCK_URL)
         self.rect.left = INIT_X
         self.SPEED = [-2,0]
 
