@@ -8,11 +8,9 @@ class PhysicsGameObject:
         self.prev_update_time = time.time()
         self.acc = [0,20]
         self.vel = [0,0]
-        # self.time_elapsed_val = 0.01
         self.first_time = True
 
     def update(self):
-        # if self._should_update():
         self._update_vel()
         self.rect = self.rect.move(self.vel)
 
