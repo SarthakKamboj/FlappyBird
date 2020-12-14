@@ -1,5 +1,6 @@
 import pygame
 
+
 class GameObject:
     def __init__(self,URL,SCALE=None):
         self.URL = URL
@@ -15,7 +16,9 @@ class GameObject:
             orig_rect = orig_surface.get_rect()
             SCALED_DIM = (int(orig_rect.width*self.SCALE),int(orig_rect.height*self.SCALE))
             self.surface = pygame.transform.scale(orig_surface,SCALED_DIM)
-        
+
     def _get_rect(self):
         self.rect = self.surface.get_rect()
-    
+
+    def blit(self,screen):
+        screen.blit(self.surface,self.rect)
