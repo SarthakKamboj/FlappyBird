@@ -9,7 +9,7 @@ pygame.init()
 SIZE = WIDTH, HEIGHT = 1300, 700
 BLACK = (0, 0, 0)
 FPS = 60
-WAIT_TIME = 1 / FPS 
+WAIT_TIME = 1 / FPS
 
 screen = pygame.display.set_mode(SIZE)
 game_loop = GameLoop(screen)

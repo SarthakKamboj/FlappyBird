@@ -2,33 +2,35 @@ import pygame
 
 
 class GameObject:
-    def __init__(self,URL,SCALE=None,WIDTH=None,HEIGHT=None):
-        self.URL = URL
-        self.SCALE = SCALE
-        self.HEIGHT = HEIGHT
-        self.WIDTH = WIDTH
+    def __init__(self, url, scale=None, width=None, height=None):
+        self.url = url
+        self.scale = scale
+        self.height = height
+        self.width = width
         self._load_surface()
         self._get_rect()
 
     def _load_surface(self):
-        self.surface = pygame.image.load(self.URL)
+        self.surface = pygame.image.load(self.url)
 
-        if self.SCALE or self.HEIGHT or self.WIDTH:
+        if self.scale or self.height or self.width:
             orig_rect = self.surface.get_rect()
 
-            WIDTH, HEIGHT = orig_rect.width, orig_rect.height
+            width, height = orig_rect.width, orig_rect.height
 
-            if self.SCALE:
-                WIDTH,HEIGHT = (int(orig_rect.width*self.SCALE),int(orig_rect.height*self.SCALE))
-            if self.HEIGHT:
-                HEIGHT = self.HEIGHT
-            if self.WIDTH:
-                WIDTH = self.WIDTH
+            if self.scale:
+                width, height = (int(orig_rect.width*self.scale),
+                                 int(orig_rect.height*self.scale))
+            if self.height:
+                height = self.height
+            if self.width:
+                width = self.width
 
-            self.surface = pygame.transform.scale(self.surface,(WIDTH,HEIGHT))
+            self.surface = pygame.transform.scale(
+                self.surface, (width, height))
 
     def _get_rect(self):
         self.rect = self.surface.get_rect()
 
-    def blit(self,screen):
-        screen.blit(self.surface,self.rect)
+    def blit(self, screen):
+        screen.blit(self.surface, self.rect)

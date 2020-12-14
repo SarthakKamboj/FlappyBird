@@ -1,3 +1,4 @@
+import random
 import pygame
 import sys
 import keyboard
@@ -7,34 +8,52 @@ from .pipe import PipeBody, PipeHead
 from ..gameobject import GameObject
 import pygame
 
-class Pipe():
-    def __init__(self):
-        self.pipe_head = PipeHead()
-        self.pipe_body = PipeBody()
 
-    def blit(self,screen):
+class Pipe:
+    def __init__(self, PIPE_HEIGHT, upside_down=True):
+        if upside_down:
+            self.pipe_body = PipeBody(top=0, height=PIPE_HEIGHT)
+            self.pipe_head = PipeHead(top=self.pipe_body.get_height())
+        else:
+            height = pygame.display.get_surface().get_height()
+            self.pipe_body = PipeBody(bottom=0, height=PIPE_HEIGHT)
+            self.pipe_head = PipeHead(bottom=PIPE_HEIGHT)
+
+    @staticmethod
+    def generate_pipe_heights():
+        GAP = 40
+        screen_height = pygame.display.get_surface().get_height()
+        MIN_HEIGHT = 10
+        MAX_HEIGHT = int((screen_height - GAP) * (2/3))
+
+        top_height = random.randint(MIN_HEIGHT, MAX_HEIGHT)
+        bottom_height = screen_height - GAP - top_height
+
+        return (top_height, bottom_height)
+
+    def blit(self, screen):
         self.pipe_head.blit(screen)
         self.pipe_body.blit(screen)
 
-class FlappyBird(PhysicsGameObject,GameObject):
+
+class FlappyBird(PhysicsGameObject, GameObject):
     def __init__(self):
         FLAPPY_BIRD_URL = "images/flappy_bird.png"
         SCALE = 0.09
         PhysicsGameObject.__init__(self)
-        GameObject.__init__(self,URL=FLAPPY_BIRD_URL,SCALE=SCALE)
+        GameObject.__init__(self, url=FLAPPY_BIRD_URL, scale=SCALE)
         self._update_initial_pos()
         self._set_rect_center()
         self._init_variables()
 
     def _init_variables(self):
         self.rot = 0
-        self.JUMP_VEL = (0,-7.5)
+        self.JUMP_VEL = (0, -7.5)
         self.MAX_ROTATION = 20
         self.MIN_ROTATION = -80
         self.ROTATION_VEL = 1.5
         self.ROTATION_TURNING_POINT_VEL = 7
         self.rotated_surface = None
-       
 
     def _set_rect_center(self):
         left = self.rect.left
@@ -48,8 +67,8 @@ class FlappyBird(PhysicsGameObject,GameObject):
         self.rect.top = (height // 2) - (self.rect.height // 2)
         self.rect.left = width * 0.2
 
-    def clamp(self,val,min_val,max_val):
-        return min(max_val,max(val,min_val))
+    def clamp(self, val, min_val, max_val):
+        return min(max_val, max(val, min_val))
 
     def _rotate(self):
         if self.vel[1] >= self.ROTATION_TURNING_POINT_VEL:
@@ -57,8 +76,8 @@ class FlappyBird(PhysicsGameObject,GameObject):
         else:
             self.rot += 20
 
-        self.rot = self.clamp(self.rot,self.MIN_ROTATION,self.MAX_ROTATION)
-        self.rotated_surface = pygame.transform.rotate(self.surface,self.rot)
+        self.rot = self.clamp(self.rot, self.MIN_ROTATION, self.MAX_ROTATION)
+        self.rotated_surface = pygame.transform.rotate(self.surface, self.rot)
         self.rect = self.rotated_surface.get_rect(center=self.rect.center)
 
     def update(self):
@@ -67,23 +86,23 @@ class FlappyBird(PhysicsGameObject,GameObject):
             self.vel = self.JUMP_VEL
         self._rotate()
 
-    def blit(self,screen):
+    def blit(self, screen):
         if self.rotated_surface:
-            screen.blit(self.rotated_surface,self.rect)
+            screen.blit(self.rotated_surface, self.rect)
         else:
-            screen.blit(self.surface,self.rect)
+            screen.blit(self.surface, self.rect)
 
 
 class BackgroundSurface(GameObject):
-    def __init__(self,INIT_X):
+    def __init__(self, INIT_X):
         BCK_URL = "images/bck.PNG"
-        super().__init__(URL=BCK_URL)
+        super().__init__(url=BCK_URL)
         self.rect.left = INIT_X
-        self.SPEED = [-2,0]
+        self.SPEED = [-2, 0]
 
     def get_image(self):
         return self.surface
-    
+
     def get_rect(self):
         return self.rect
 
@@ -98,7 +117,8 @@ class BackgroundSurface(GameObject):
     def move(self):
         self.rect = self.rect.move(self.SPEED)
         self._slide()
-    
+
+
 class Background:
     def __init__(self):
         self._generate_bck_surfaces()
@@ -116,6 +136,6 @@ class Background:
         for bck in self.bcks:
             bck.move()
 
-    def blit(self,screen):
+    def blit(self, screen):
         for bck in self.bcks:
             bck.blit(screen)
