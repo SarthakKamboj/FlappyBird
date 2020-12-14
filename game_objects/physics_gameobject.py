@@ -6,7 +6,7 @@ class PhysicsGameObject:
     def __init__(self):
         self.rect = pygame.Rect(0,0,0,0)
         self.prev_update_time = time.time()
-        self.acc = [0,10]
+        self.acc = [0,20]
         self.vel = [0,0]
         # self.time_elapsed_val = 0.01
         self.first_time = True

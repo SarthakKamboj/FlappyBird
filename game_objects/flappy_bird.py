@@ -11,11 +11,13 @@ class FlappyBird(PhysicsGameObject):
         self._update_initial_pos()
         self.rot = 0
         self._set_rect_center()
-        self.JUMP_VEL = (0,-5)
-        self.MAX_ROTATION = 70
-        self.MIN_ROTATION = -70
-        self.ROTATION_VEL = 3
+        self.JUMP_VEL = (0,-7.5)
+        self.MAX_ROTATION = 20
+        self.MIN_ROTATION = -80
+        self.ROTATION_VEL = 1.5
+        self.ROTATION_TURNING_POINT_VEL = 3
         self.rotated_surface = None
+
 
     def _set_rect_center(self):
         left = self.rect.left
@@ -46,10 +48,10 @@ class FlappyBird(PhysicsGameObject):
         return min(max_val,max(val,min_val))
 
     def _rotate(self):
-        if self.vel[1] <= 0:
-            self.rot += self.ROTATION_VEL
+        if self.vel[1] >= self.ROTATION_TURNING_POINT_VEL:
+            self.rot -= 10
         else:
-            self.rot -= self.ROTATION_VEL
+            self.rot += 20
 
         self.rot = self.clamp(self.rot,self.MIN_ROTATION,self.MAX_ROTATION)
         self.rotated_surface = pygame.transform.rotate(self.surface,self.rot)
