@@ -8,26 +8,37 @@ from .pipe import PipeBody, PipeHead
 from ..gameobject import GameObject
 import pygame
 
+PIPE_WIDTH = 90
+PIPE_HEAD_HEIGHT = PIPE_WIDTH // 2
+
 
 class Pipe:
-    def __init__(self, PIPE_HEIGHT, upside_down=True):
+    def __init__(self, pipe_height, upside_down):
         if upside_down:
-            self.pipe_body = PipeBody(top=0, height=PIPE_HEIGHT)
-            self.pipe_head = PipeHead(top=self.pipe_body.get_height())
+            self.pipe_body = PipeBody(
+                top=0, pipe_width=PIPE_WIDTH, height=pipe_height)
+            self.pipe_head = PipeHead(
+                width=PIPE_WIDTH,
+                height=PIPE_HEAD_HEIGHT,
+                top=self.pipe_body.get_height())
         else:
             height = pygame.display.get_surface().get_height()
-            self.pipe_body = PipeBody(bottom=0, height=PIPE_HEIGHT)
-            self.pipe_head = PipeHead(bottom=PIPE_HEIGHT)
+            self.pipe_body = PipeBody(
+                pipe_width=PIPE_WIDTH, bottom=0, height=pipe_height)
+            self.pipe_head = PipeHead(
+                width=PIPE_WIDTH,
+                height=PIPE_HEAD_HEIGHT,
+                bottom=pipe_height)
 
     @staticmethod
     def generate_pipe_heights():
-        GAP = 40
+        GAP = 120
         screen_height = pygame.display.get_surface().get_height()
         MIN_HEIGHT = 10
-        MAX_HEIGHT = int((screen_height - GAP) * (2/3))
+        MAX_HEIGHT = int((screen_height - GAP) * 0.5)
 
         top_height = random.randint(MIN_HEIGHT, MAX_HEIGHT)
-        bottom_height = screen_height - GAP - top_height
+        bottom_height = screen_height - GAP - top_height - (PIPE_HEAD_HEIGHT*2)
 
         return (top_height, bottom_height)
 

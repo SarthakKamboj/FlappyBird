@@ -8,11 +8,11 @@ PIPE_WIDTH = 90
 
 
 class PipeHead(ColliderPhysicsObject, GameObject):
-    def __init__(self, top=None, bottom=None):
+    def __init__(self, width, height, top=None, bottom=None):
         HEAD_URL = PIPE_IMAGES_BASE_URL + "/head.PNG"
-        PIPE_HEAD_HEIGHT = PIPE_WIDTH//2
+        height = PIPE_WIDTH//2
         GameObject.__init__(self, url=HEAD_URL,
-                            height=PIPE_HEAD_HEIGHT, width=PIPE_WIDTH)
+                            height=height, width=width)
         ColliderPhysicsObject.__init__(self)
 
         SCREEN_HEIGHT = pygame.display.get_surface().get_height()
@@ -24,11 +24,11 @@ class PipeHead(ColliderPhysicsObject, GameObject):
 
 
 class PipeBody(ColliderPhysicsObject, GameObject):
-    def __init__(self,  height, top=None, bottom=None):
+    def __init__(self, pipe_width, height, top=None, bottom=None):
 
         PIPE_WIDTH_RATIO = 0.9
-        PIPE_BODY_WIDTH = int(PIPE_WIDTH * PIPE_WIDTH_RATIO)
-        PIPE_BODY_PADDING = int(PIPE_WIDTH * ((1-PIPE_WIDTH_RATIO)/2))
+        PIPE_BODY_WIDTH = int(pipe_width * PIPE_WIDTH_RATIO)
+        PIPE_BODY_PADDING = int(pipe_width * ((1-PIPE_WIDTH_RATIO)/2))
 
         BODY_URL = PIPE_IMAGES_BASE_URL + "/body.PNG"
 

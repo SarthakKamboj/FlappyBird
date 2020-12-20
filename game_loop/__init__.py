@@ -8,12 +8,14 @@ class GameLoop:
         self.bck = Bck()
         self.flappy_bird = FlappyBird()
         top_height, bottom_height = Pipe.generate_pipe_heights()
-        self.pipe = Pipe(PIPE_HEIGHT=bottom_height)
+        self.pipe = Pipe(pipe_height=top_height, upside_down=True)
+        self.pipe2 = Pipe(pipe_height=bottom_height, upside_down=False)
 
     def blit(self):
         self.bck.blit(self.screen)
         self.flappy_bird.blit(self.screen)
         self.pipe.blit(self.screen)
+        self.pipe2.blit(self.screen)
 
     def update(self):
         self.bck.move()
